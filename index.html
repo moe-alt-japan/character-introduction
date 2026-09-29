@@ -44,26 +44,6 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
 .reset{width:100%;margin-top:18px;padding:11px;border:0;border-radius:12px;background:#286b69;color:white;font:700 19px inherit;cursor:pointer}
 @media(max-width:1050px){.app{grid-template-columns:1fr}.right-column{grid-template-rows:auto}}
 @media(max-width:650px){.cards{grid-template-columns:repeat(3,1fr)}.sentence{font-size:22px}}
-
-/* Compact left panel for a better 100% browser view */
-.app{grid-template-columns:minmax(300px,.62fr) minmax(760px,1.55fr);gap:14px;padding:14px}
-.left-panel{padding:12px 14px}
-.left-panel .photo-box{width:min(100%,300px);margin-bottom:6px;border-width:3px;border-radius:17px}
-.left-panel .camera-button{width:46px;height:40px;font-size:21px;top:8px;left:8px}
-.left-panel .camera-actions{margin:5px 0;gap:6px}
-.left-panel .camera-action{padding:6px 10px;font-size:13px}
-.upload-row{display:flex;justify-content:center;margin:5px 0}
-.left-panel .camera-status{min-height:16px;font-size:11px}
-.left-panel .name-row{margin:7px 0}
-.left-panel .name-row input{padding:8px 11px;font-size:16px;border-width:2px}
-.left-panel .pronouns{gap:5px;margin:6px 0 9px}
-.left-panel .pronoun-btn{padding:7px 3px;font-size:15px;border-width:2px}
-.left-panel .output{padding-top:4px;border-top-width:2px}
-.left-panel .sentence{font-size:20px;margin:5px 0;padding:4px 5px;min-height:55px;gap:7px;border-bottom-width:2px}
-.left-panel .sentence-picture{width:48px;height:48px;flex-basis:48px;border-radius:8px;padding:2px}
-.left-panel .reset{margin-top:9px;padding:8px;font-size:16px}
-@media(max-width:1120px){.app{grid-template-columns:1fr}.right-column{grid-template-rows:auto}.left-panel .photo-box{width:min(100%,360px)}}
-
 </style>
 </head>
 <body>
@@ -82,7 +62,7 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
     <button class="camera-action" id="retakeBtn" type="button">↻ Retake</button>
     <button class="camera-action" id="closeCameraBtn" type="button">✕ Close</button>
   </div>
-  <div class="upload-row">
+  <div style="display:flex;justify-content:center;margin:8px 0;">
     <button class="camera-action" id="uploadPhotoBtn" type="button">📁 Upload Photo</button>
     <input id="photoFileInput" type="file" accept="image/*" hidden>
   </div>
@@ -282,10 +262,16 @@ function clearPhoto(){
   photoPlaceholder.style.display="block";cameraActions.style.display="none";cameraStatus.textContent="";photoFileInput.value="";
 }
 uploadPhotoBtn.onclick=()=>photoFileInput.click();
+
 photoFileInput.onchange=()=>{
-  const file=photoFileInput.files&&photoFileInput.files[0];
+  const file=photoFileInput.files && photoFileInput.files[0];
   if(!file)return;
-  if(!file.type.startsWith("image/")){cameraStatus.textContent="Please choose an image file.";photoFileInput.value="";return}
+  if(!file.type.startsWith("image/")){
+    cameraStatus.textContent="Please choose an image file.";
+    photoFileInput.value="";
+    return;
+  }
+
   stopCamera();
   const reader=new FileReader();
   reader.onload=()=>{
@@ -296,9 +282,10 @@ photoFileInput.onchange=()=>{
     cameraActions.style.display="none";
     cameraStatus.textContent="Photo uploaded.";
   };
-  reader.onerror=()=>cameraStatus.textContent="Sorry, the photo could not be opened.";
+  reader.onerror=()=>{cameraStatus.textContent="Sorry, the photo could not be opened."};
   reader.readAsDataURL(file);
 };
+
 cameraBtn.onclick=startCamera;takePhotoBtn.onclick=takePhoto;retakeBtn.onclick=startCamera;
 closeCameraBtn.onclick=()=>{stopCamera();cameraVideo.style.display="none";photoPlaceholder.style.display=capturedPhoto.src?"none":"block";cameraActions.style.display="none";cameraStatus.textContent=""};
 window.addEventListener("pagehide",stopCamera);
