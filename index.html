@@ -28,7 +28,7 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
 .pronoun-btn{padding:10px 4px;border:3px solid #333;border-radius:12px;background:#ddd;font:700 20px inherit;cursor:pointer}
 .pronoun-btn.active{background:#ff82d5}
 .output{border-top:3px solid #bdd9d8;padding-top:8px}
-.sentence{font-size:27px;margin:13px 0;padding:9px 6px;border-bottom:3px solid #55c4c1}
+.sentence{font-size:27px;margin:13px 0;padding:7px 6px;border-bottom:3px solid #55c4c1;display:flex;align-items:center;gap:10px;min-height:82px}.sentence-text{flex:1}.sentence-picture{width:70px;height:70px;flex:0 0 70px;border:2px solid #9bb9b8;border-radius:10px;background:#fff;object-fit:contain;padding:3px}.sentence-picture.empty{visibility:hidden}
 .answer{color:#d9a900;font-weight:bold}
 .mode-row{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
 .mode-btn{padding:9px 20px;border:3px solid #333;border-radius:11px;font:700 18px inherit;cursor:pointer;background:#ddd}
@@ -37,7 +37,7 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
 .help{text-align:center;margin:-5px 0 12px;color:#555;font-size:14px}
 .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
 .choice-card{min-height:72px;background:white;border:3px solid #444;border-radius:11px;padding:7px 5px;font:700 14px inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
-.choice-card span{font-size:25px}
+.choice-card span{font-size:25px}.choice-card img{width:72px;height:58px;object-fit:contain;display:block}.choice-card{min-height:105px}
 .ability-card.selected-can{background:#c9ecff;border-color:#1888c5}
 .ability-card.selected-cant{background:#ffd0dc;border-color:#d83d67}
 .personality-card.selected{background:#c9f2ff;border-color:#008bb8}
@@ -76,11 +76,11 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
   </div>
 
   <div class="output">
-    <div class="sentence" id="introSentence">This is <span class="answer" id="personName">_____</span>.</div>
-    <div class="sentence"><span class="subject">He</span> can <span class="answer" id="canText">_____</span>.</div>
-    <div class="sentence"><span class="subject">He</span> can't <span class="answer" id="cantText">_____</span>.</div>
-    <div class="sentence"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality1">_____</span>.</div>
-    <div class="sentence"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality2">_____</span>.</div>
+    <div class="sentence" id="introSentence"><span class="sentence-text">This is <span class="answer" id="personName">_____</span>.</span></div>
+    <div class="sentence"><span class="sentence-text"><span class="subject">He</span> can <span class="answer" id="canText">_____</span>.</span><img class="sentence-picture empty" id="canPicture" alt=""></div>
+    <div class="sentence"><span class="sentence-text"><span class="subject">He</span> can't <span class="answer" id="cantText">_____</span>.</span><img class="sentence-picture empty" id="cantPicture" alt=""></div>
+    <div class="sentence"><span class="sentence-text"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality1">_____</span>.</span><img class="sentence-picture empty" id="personalityPicture1" alt=""></div>
+    <div class="sentence"><span class="sentence-text"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality2">_____</span>.</span><img class="sentence-picture empty" id="personalityPicture2" alt=""></div>
   </div>
 
   <button class="reset" id="resetBtn">🔄 Reset</button>
@@ -95,25 +95,25 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
     </div>
     <div class="help">Choose Can or Can't, then choose an activity.</div>
     <div class="cards" id="abilityCards">
-      <button class="choice-card ability-card" data-value="play soccer"><span>⚽</span>play soccer</button>
-<button class="choice-card ability-card" data-value="play baseball"><span>⚾</span>play baseball</button>
-<button class="choice-card ability-card" data-value="play badminton"><span>🏸</span>play badminton</button>
-<button class="choice-card ability-card" data-value="play table tennis"><span>🏓</span>play table tennis</button>
-<button class="choice-card ability-card" data-value="play volleyball"><span>🏐</span>play volleyball</button>
-<button class="choice-card ability-card" data-value="swim"><span>🏊</span>swim</button>
-<button class="choice-card ability-card" data-value="skate"><span>⛸️</span>skate</button>
-<button class="choice-card ability-card" data-value="ski"><span>⛷️</span>ski</button>
-<button class="choice-card ability-card" data-value="do kendo"><span>🥋</span>do kendo</button>
-<button class="choice-card ability-card" data-value="do judo"><span>🥋</span>do judo</button>
-<button class="choice-card ability-card" data-value="play shogi"><span>♟️</span>play shogi</button>
-<button class="choice-card ability-card" data-value="play kendama"><span>🔴</span>play kendama</button>
-<button class="choice-card ability-card" data-value="play the piano"><span>🎹</span>play the piano</button>
-<button class="choice-card ability-card" data-value="play the recorder"><span>🎵</span>play the recorder</button>
-<button class="choice-card ability-card" data-value="ride a unicycle"><span>🚲</span>ride a unicycle</button>
-<button class="choice-card ability-card" data-value="cook"><span>🍳</span>cook</button>
-<button class="choice-card ability-card" data-value="run fast"><span>🏃</span>run fast</button>
-<button class="choice-card ability-card" data-value="jump high"><span>🤸</span>jump high</button>
-<button class="choice-card ability-card" data-value="sing well"><span>🎤</span>sing well</button>
+      <button class="choice-card ability-card" data-value="play soccer" data-image="images/soccer.png"><img src="images/soccer.png" alt="play soccer">play soccer</button>
+<button class="choice-card ability-card" data-value="play baseball" data-image="images/baseball.png"><img src="images/baseball.png" alt="play baseball">play baseball</button>
+<button class="choice-card ability-card" data-value="play badminton" data-image="images/badminton.png"><img src="images/badminton.png" alt="play badminton">play badminton</button>
+<button class="choice-card ability-card" data-value="play table tennis" data-image="images/table-tennis.png"><img src="images/table-tennis.png" alt="play table tennis">play table tennis</button>
+<button class="choice-card ability-card" data-value="play volleyball" data-image="images/volleyball.png"><img src="images/volleyball.png" alt="play volleyball">play volleyball</button>
+<button class="choice-card ability-card" data-value="swim" data-image="images/swim.png"><img src="images/swim.png" alt="swim">swim</button>
+<button class="choice-card ability-card" data-value="skate" data-image="images/skate.png"><img src="images/skate.png" alt="skate">skate</button>
+<button class="choice-card ability-card" data-value="ski" data-image="images/ski.png"><img src="images/ski.png" alt="ski">ski</button>
+<button class="choice-card ability-card" data-value="do kendo" data-image="images/kendo.png"><img src="images/kendo.png" alt="do kendo">do kendo</button>
+<button class="choice-card ability-card" data-value="do judo" data-image="images/judo.png"><img src="images/judo.png" alt="do judo">do judo</button>
+<button class="choice-card ability-card" data-value="play shogi" data-image="images/shogi.png"><img src="images/shogi.png" alt="play shogi">play shogi</button>
+<button class="choice-card ability-card" data-value="play kendama" data-image="images/kendama.png"><img src="images/kendama.png" alt="play kendama">play kendama</button>
+<button class="choice-card ability-card" data-value="play the piano" data-image="images/piano.png"><img src="images/piano.png" alt="play the piano">play the piano</button>
+<button class="choice-card ability-card" data-value="play the recorder" data-image="images/recorder.png"><img src="images/recorder.png" alt="play the recorder">play the recorder</button>
+<button class="choice-card ability-card" data-value="ride a unicycle" data-image="images/unicycle.png"><img src="images/unicycle.png" alt="ride a unicycle">ride a unicycle</button>
+<button class="choice-card ability-card" data-value="cook" data-image="images/cook.png"><img src="images/cook.png" alt="cook">cook</button>
+<button class="choice-card ability-card" data-value="run fast" data-image="images/run.png"><img src="images/run.png" alt="run fast">run fast</button>
+<button class="choice-card ability-card" data-value="jump high" data-image="images/jump.png"><img src="images/jump.png" alt="jump high">jump high</button>
+<button class="choice-card ability-card" data-value="sing well" data-image="images/sing.png"><img src="images/sing.png" alt="sing well">sing well</button>
     </div>
   </section>
 
@@ -121,18 +121,18 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
     <h2 class="section-title">😊 Personality</h2>
     <div class="help">Choose up to 2 personality words.</div>
     <div class="cards" id="personalityCards">
-      <button class="choice-card personality-card" data-value="kind"><span>😊</span>kind</button>
-<button class="choice-card personality-card" data-value="funny"><span>😂</span>funny</button>
-<button class="choice-card personality-card" data-value="friendly"><span>🤝</span>friendly</button>
-<button class="choice-card personality-card" data-value="cheerful"><span>☀️</span>cheerful</button>
-<button class="choice-card personality-card" data-value="active"><span>🏃</span>active</button>
-<button class="choice-card personality-card" data-value="quiet"><span>🤫</span>quiet</button>
-<button class="choice-card personality-card" data-value="shy"><span>😳</span>shy</button>
-<button class="choice-card personality-card" data-value="helpful"><span>🙋</span>helpful</button>
-<button class="choice-card personality-card" data-value="smart"><span>🧠</span>smart</button>
-<button class="choice-card personality-card" data-value="brave"><span>🦁</span>brave</button>
-<button class="choice-card personality-card" data-value="nice"><span>👍</span>nice</button>
-<button class="choice-card personality-card" data-value="energetic"><span>⚡</span>energetic</button>
+      <button class="choice-card personality-card" data-value="kind" data-image="images/kind.png"><img src="images/kind.png" alt="kind">kind</button>
+<button class="choice-card personality-card" data-value="funny" data-image="images/funny.png"><img src="images/funny.png" alt="funny">funny</button>
+<button class="choice-card personality-card" data-value="friendly" data-image="images/friendly.png"><img src="images/friendly.png" alt="friendly">friendly</button>
+<button class="choice-card personality-card" data-value="cheerful" data-image="images/cheerful.png"><img src="images/cheerful.png" alt="cheerful">cheerful</button>
+<button class="choice-card personality-card" data-value="active" data-image="images/active.png"><img src="images/active.png" alt="active">active</button>
+<button class="choice-card personality-card" data-value="quiet" data-image="images/quiet.png"><img src="images/quiet.png" alt="quiet">quiet</button>
+<button class="choice-card personality-card" data-value="shy" data-image="images/shy.png"><img src="images/shy.png" alt="shy">shy</button>
+<button class="choice-card personality-card" data-value="helpful" data-image="images/helpful.png"><img src="images/helpful.png" alt="helpful">helpful</button>
+<button class="choice-card personality-card" data-value="smart" data-image="images/smart.png"><img src="images/smart.png" alt="smart">smart</button>
+<button class="choice-card personality-card" data-value="brave" data-image="images/brave.png"><img src="images/brave.png" alt="brave">brave</button>
+<button class="choice-card personality-card" data-value="nice" data-image="images/nice.png"><img src="images/nice.png" alt="nice">nice</button>
+<button class="choice-card personality-card" data-value="energetic" data-image="images/energetic.png"><img src="images/energetic.png" alt="energetic">energetic</button>
     </div>
   </section>
 </div>
@@ -153,9 +153,9 @@ function updateName(){
   const name=nameInput.value.trim();
   personName.textContent=name||"_____";
   const intro=document.getElementById("introSentence");
-  if(pronoun==="I") intro.innerHTML='My name is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
-  else if(pronoun==="You") intro.innerHTML='Your name is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
-  else intro.innerHTML='This is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
+  if(pronoun==="I") intro.innerHTML='<span class="sentence-text">My name is <span class="answer" id="personName">'+(name||"_____")+'</span>.</span>';
+  else if(pronoun==="You") intro.innerHTML='<span class="sentence-text">Your name is <span class="answer" id="personName">'+(name||"_____")+'</span>.</span>';
+  else intro.innerHTML='<span class="sentence-text">This is <span class="answer" id="personName">'+(name||"_____")+'</span>.</span>';
 }
 nameInput.addEventListener("input",updateName);
 
@@ -176,17 +176,19 @@ function setMode(mode){
 document.getElementById("canBtn").onclick=()=>setMode("can");
 document.getElementById("cantBtn").onclick=()=>setMode("cant");
 
+function setSentencePicture(id,src,alt){const img=document.getElementById(id);if(src){img.src=src;img.alt=alt||"";img.classList.remove("empty")}else{img.removeAttribute("src");img.alt="";img.classList.add("empty")}}
+
 document.querySelectorAll(".ability-card").forEach(card=>{
   card.onclick=()=>{
     const value=card.dataset.value;
     if(abilityMode==="can"){
       canAbility=value;
-      document.getElementById("canText").textContent=value;
+      document.getElementById("canText").textContent=value;setSentencePicture("canPicture",card.dataset.image,value);
       document.querySelectorAll(".ability-card").forEach(c=>c.classList.remove("selected-can"));
       card.classList.add("selected-can");
     } else {
       cantAbility=value;
-      document.getElementById("cantText").textContent=value;
+      document.getElementById("cantText").textContent=value;setSentencePicture("cantPicture",card.dataset.image,value);
       document.querySelectorAll(".ability-card").forEach(c=>c.classList.remove("selected-cant"));
       card.classList.add("selected-cant");
     }
@@ -206,6 +208,10 @@ document.querySelectorAll(".personality-card").forEach(card=>{
     }
     document.getElementById("personality1").textContent=personalities[0]||"_____";
     document.getElementById("personality2").textContent=personalities[1]||"_____";
+    const p1=personalities[0]?document.querySelector('.personality-card[data-value="'+personalities[0]+'"]'):null;
+    const p2=personalities[1]?document.querySelector('.personality-card[data-value="'+personalities[1]+'"]'):null;
+    setSentencePicture("personalityPicture1",p1?.dataset.image||"",personalities[0]||"");
+    setSentencePicture("personalityPicture2",p2?.dataset.image||"",personalities[1]||"");
   };
 });
 
@@ -256,7 +262,7 @@ window.addEventListener("pagehide",stopCamera);
 document.getElementById("resetBtn").onclick=()=>{
   clearPhoto();nameInput.value="";canAbility="";cantAbility="";personalities=[];
   document.getElementById("canText").textContent="_____";document.getElementById("cantText").textContent="_____";
-  document.getElementById("personality1").textContent="_____";document.getElementById("personality2").textContent="_____";
+  document.getElementById("personality1").textContent="_____";document.getElementById("personality2").textContent="_____";setSentencePicture("canPicture","","");setSentencePicture("cantPicture","","");setSentencePicture("personalityPicture1","","");setSentencePicture("personalityPicture2","","");
   document.querySelectorAll(".choice-card").forEach(c=>c.classList.remove("selected","selected-can","selected-cant"));
   setMode("can");setPronoun("He");updateName();
 };
