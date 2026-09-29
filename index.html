@@ -1,1 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Character Introduction</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
+  background: #e9f5f4;
+  color: #222;
+}
+
+header {
+  background: #286b69;
+  color: white;
+  text-align: center;
+  padding: 16px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 20px;
+  max-width: 1400px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* LEFT SIDE */
+
+.preview {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  min-height: 650px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.name-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.name-row input {
+  flex: 1;
+  padding: 12px 15px;
+  border: 3px solid #286b69;
+  border-radius: 12px;
+  font-size: 20px;
+  font-family: inherit;
+}
+
+.gender-btn {
+  border: 3px solid #333;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  background: #ddd;
+}
+
+.gender-btn.active {
+  background: #ff80d5;
+}
+
+.character {
+  width: 190px;
+  height: 190px;
+  border-radius: 20px;
+  background: #f2f2f2;
+  margin: 15px auto 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+}
+
+.sentence {
+  font-size: 30px;
+  margin: 20px 0;
+  padding: 12px 10px;
+  border-bottom: 3px solid #55c4c1;
+}
+
+.answer {
+  color: #e7b800;
+  font-weight: bold;
+}
+
+/* RIGHT SIDE */
+
+.controls {
+  background: #d8d8d8;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.section-title {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px 0 15px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.card {
+  background: white;
+  border: 3px solid #333;
+  border-radius: 12px;
+  padding: 12px 6px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  min-height: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .15s;
+}
+
+.card:hover {
+  transform: scale(1.04);
+}
+
+.card.selected {
+  background: #fff29a;
+  border-color: #e3ad00;
+}
+
+.personality-card.selected {
+  background: #bdefff;
+  border-color: #008bb8;
+}
+
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.toggle {
+  padding: 8px 16px;
+  border: 3px solid #333;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.can {
+  background: #55b9ff;
+}
+
+.cant {
+  background: #ff6f92;
+}
+
+hr {
+  margin: 25px 0;
+  border: 0;
+  border-top: 3px solid #aaa;
+}
+
+.reset {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #286b69;
+  color: white;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+@media(max-width: 850px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  👤 Character Introduction
+</header>
+
+<div class="app">
+
+  <!-- LEFT -->
+  <section class="preview">
+
+    <div class="name-row">
+      <input
+        id="nameInput"
+        type="text"
+        placeholder="Type a name..."
+        maxlength="20"
+      >
+
+      <button class="gender-btn active" id="heBtn">He</button>
+      <button class="gender-btn" id="sheBtn">She</button>
+    </div>
+
+    <div class="character" id="character">
+      👦
+    </div>
+
+    <div class="sentence">
+      This is
+      <span class="answer" id="personName">_____</span>.
+    </div>
+
+    <div class="sentence">
+      <span id="pronoun1">He</span>
+      <span id="abilityType">can</span>
+      <span class="answer" id="abilityText">_____</span>.
+    </div>
+
+    <div class="sentence">
+      <span id="pronoun2">He</span> is
+      <span class="answer" id="personality1">_____</span>.
+    </div>
+
+    <div class="sentence">
+      <span id="pronoun3">He</span> is
+      <span class="answer" id="personality2">_____</span>.
+    </div>
+
+  </section>
+
+
+  <!-- RIGHT -->
+  <section class="controls">
+
+    <div class="section-title">🏃 What can he/she do?</div>
+
+    <div class="toggle-row">
+      <button class="toggle can" id="canBtn">Can</button>
+      <button class="toggle cant" id="cantBtn">Can't</button>
+    </div>
+
+    <div class="cards" id="abilityCards">
+
+      <div class="card" data-value="play soccer">⚽ play soccer</div>
+      <div class="card" data-value="play baseball">⚾ play baseball</div>
+      <div class="card" data-value="play badminton">🏸 play badminton</div>
+
+      <div class="card" data-value="play table tennis">🏓 play table tennis</div>
+      <div class="card" data-value="play volleyball">🏐 play volleyball</div>
+      <div class="card" data-value="swim">🏊 swim</div>
+
+      <div class="card" data-value="skate">⛸️ skate</div>
+      <div class="card" data-value="ski">⛷️ ski</div>
+      <div class="card" data-value="do kendo">🥋 do kendo</div>
+
+      <div class="card" data-value="do judo">🥋 do judo</div>
+      <div class="card" data-value="play shogi">♟️ play shogi</div>
+      <div class="card" data-value="play kendama">🔴 play kendama</div>
+
+      <div class="card" data-value="play the piano">🎹 play the piano</div>
+      <div class="card" data-value="play the recorder">🎵 play the recorder</div>
+      <div class="card" data-value="ride a unicycle">🚲 ride a unicycle</div>
+
+      <div class="card" data-value="cook">🍳 cook</div>
+      <div class="card" data-value="run fast">🏃 run fast</div>
+      <div class="card" data-value="jump high">🤸 jump high</div>
+
+      <div class="card" data-value="sing well">🎤 sing well</div>
+
+    </div>
+
+    <hr>
+
+    <div class="section-title">😊 What is he/she like?</div>
+
+    <div class="cards" id="personalityCards">
+
+      <div class="card personality-card" data-value="kind">
+        😊 kind
+      </div>
+
+      <div class="card personality-card" data-value="funny">
+        😂 funny
+      </div>
+
+      <div class="card personality-card" data-value="friendly">
+        🤝 friendly
+      </div>
+
+      <div class="card personality-card" data-value="cheerful">
+        ☀️ cheerful
+      </div>
+
+      <div class="card personality-card" data-value="active">
+        🏃 active
+      </div>
+
+      <div class="card personality-card" data-value="quiet">
+        🤫 quiet
+      </div>
+
+      <div class="card personality-card" data-value="shy">
+        😳 shy
+      </div>
+
+      <div class="card personality-card" data-value="helpful">
+        🙋 helpful
+      </div>
+
+      <div class="card personality-card" data-value="smart">
+        🧠 smart
+      </div>
+
+      <div class="card personality-card" data-value="brave">
+        🦁 brave
+      </div>
+
+      <div class="card personality-card" data-value="nice">
+        👍 nice
+      </div>
+
+      <div class="card personality-card" data-value="energetic">
+        ⚡ energetic
+      </div>
+
+    </div>
+
+    <button class="reset" id="resetBtn">
+      🔄 Reset
+    </button>
+
+  </section>
+
+</div>
+
+
+<script>
+
+let pronoun = "He";
+let abilityMode = "can";
+let personalities = [];
+
+
+/* NAME */
+
+const nameInput = document.getElementById("nameInput");
+
+nameInput.addEventListener("input", () => {
+
+  const name = nameInput.value.trim();
+
+  document.getElementById("personName").textContent =
+    name || "_____";
+
+});
+
+
+/* HE / SHE */
+
+document.getElementById("heBtn").onclick = () => {
+  setGender("He");
+};
+
+document.getElementById("sheBtn").onclick = () => {
+  setGender("She");
+};
+
+function setGender(value) {
+
+  pronoun = value;
+
+  document.getElementById("pronoun1").textContent = value;
+  document.getElementById("pronoun2").textContent = value;
+  document.getElementById("pronoun3").textContent = value;
+
+  document.getElementById("character").textContent =
+    value === "He" ? "👦" : "👧";
+
+  document.getElementById("heBtn").classList.toggle(
+    "active",
+    value === "He"
+  );
+
+  document.getElementById("sheBtn").classList.toggle(
+    "active",
+    value === "She"
+  );
+}
+
+
+/* CAN / CAN'T */
+
+document.getElementById("canBtn").onclick = () => {
+
+  abilityMode = "can";
+
+  document.getElementById("abilityType").textContent =
+    "can";
+
+};
+
+document.getElementById("cantBtn").onclick = () => {
+
+  abilityMode = "can't";
+
+  document.getElementById("abilityType").textContent =
+    "can't";
+
+};
+
+
+/* ABILITY */
+
+document
+.querySelectorAll("#abilityCards .card")
+.forEach(card => {
+
+  card.onclick = () => {
+
+    document
+    .querySelectorAll("#abilityCards .card")
+    .forEach(c => c.classList.remove("selected"));
+
+    card.classList.add("selected");
+
+    document.getElementById("abilityText").textContent =
+      card.dataset.value;
+
+  };
+
+});
+
+
+/* PERSONALITY */
+
+document
+.querySelectorAll(".personality-card")
+.forEach(card => {
+
+  card.onclick = () => {
+
+    const value = card.dataset.value;
+
+    if (personalities.includes(value)) {
+
+      personalities =
+        personalities.filter(p => p !== value);
+
+      card.classList.remove("selected");
+
+    } else {
+
+      if (personalities.length >= 2) {
+
+        return;
+
+      }
+
+      personalities.push(value);
+
+      card.classList.add("selected");
+
+    }
+
+    updatePersonalities();
+
+  };
+
+});
+
+
+function updatePersonalities() {
+
+  document.getElementById("personality1").textContent =
+    personalities[0] || "_____";
+
+  document.getElementById("personality2").textContent =
+    personalities[1] || "_____";
+
+}
+
+
+/* RESET */
+
+document.getElementById("resetBtn").onclick = () => {
+
+  nameInput.value = "";
+
+  personalities = [];
+
+  setGender("He");
+
+  abilityMode = "can";
+
+  document.getElementById("personName").textContent =
+    "_____";
+
+  document.getElementById("abilityType").textContent =
+    "can";
+
+  document.getElementById("abilityText").textContent =
+    "_____";
+
+  document.getElementById("personality1").textContent =
+    "_____";
+
+  document.getElementById("personality2").textContent =
+    "_____";
+
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.remove("selected");
+  });
+
+};
+
+</script>
+
+</body>
+</html>
