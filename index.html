@@ -20,7 +20,7 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
 .camera-button{position:absolute;top:10px;left:10px;z-index:5;width:54px;height:46px;border:3px solid #222;border-radius:11px;background:white;font-size:25px;cursor:pointer}
 .camera-actions{display:none;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0}
 .camera-action{border:2px solid #333;border-radius:10px;padding:8px 12px;background:white;font:700 15px inherit;cursor:pointer}
-.camera-action.primary{background:#68c5ff}
+.camera-action.primary{background:#68c5ff}.camera-facing.active-facing{background:#ffe082;border-color:#9a6b00}
 .camera-status{min-height:20px;text-align:center;font-size:13px;color:#555}
 .name-row{display:flex;gap:8px;margin:12px 0}
 .name-row input{min-width:0;flex:1;padding:11px 14px;border:3px solid #286b69;border-radius:12px;font:20px inherit}
@@ -58,6 +58,8 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
     <canvas id="photoCanvas" hidden></canvas>
   </div>
   <div class="camera-actions" id="cameraActions">
+    <button class="camera-action camera-facing active-facing" id="frontCameraBtn" type="button">🤳 Front</button>
+    <button class="camera-action camera-facing" id="rearCameraBtn" type="button">📷 Rear</button>
     <button class="camera-action primary" id="takePhotoBtn" type="button">📸 Take Photo</button>
     <button class="camera-action" id="retakeBtn" type="button">↻ Retake</button>
     <button class="camera-action" id="closeCameraBtn" type="button">✕ Close</button>
@@ -149,6 +151,7 @@ let canAbility="";
 let cantAbility="";
 let personalities=[];
 let cameraStream=null;
+let cameraFacing="user";
 
 const nameInput=document.getElementById("nameInput");
 const personName=document.getElementById("personName");
@@ -228,6 +231,8 @@ const cameraActions=document.getElementById("cameraActions");
 const takePhotoBtn=document.getElementById("takePhotoBtn");
 const retakeBtn=document.getElementById("retakeBtn");
 const closeCameraBtn=document.getElementById("closeCameraBtn");
+const frontCameraBtn=document.getElementById("frontCameraBtn");
+const rearCameraBtn=document.getElementById("rearCameraBtn");
 const uploadPhotoBtn=document.getElementById("uploadPhotoBtn");
 const photoFileInput=document.getElementById("photoFileInput");
 const cameraStatus=document.getElementById("cameraStatus");
@@ -241,7 +246,7 @@ async function startCamera(){
   if(!navigator.mediaDevices?.getUserMedia){cameraStatus.textContent="Camera is not supported in this browser.";return}
   try{
     cameraStatus.textContent="Opening camera…";
-    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
+    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:cameraFacing}},audio:false});
     cameraVideo.srcObject=cameraStream;
     cameraVideo.style.display="block";capturedPhoto.style.display="none";photoPlaceholder.style.display="none";
     cameraActions.style.display="flex";takePhotoBtn.style.display="inline-block";retakeBtn.style.display="none";closeCameraBtn.style.display="inline-block";
@@ -285,6 +290,18 @@ photoFileInput.onchange=()=>{
   reader.onerror=()=>{cameraStatus.textContent="Sorry, the photo could not be opened."};
   reader.readAsDataURL(file);
 };
+
+function updateFacingButtons(){
+  frontCameraBtn.classList.toggle("active-facing",cameraFacing==="user");
+  rearCameraBtn.classList.toggle("active-facing",cameraFacing==="environment");
+}
+async function switchCamera(facing){
+  cameraFacing=facing;
+  updateFacingButtons();
+  if(cameraStream) await startCamera();
+}
+frontCameraBtn.onclick=()=>switchCamera("user");
+rearCameraBtn.onclick=()=>switchCamera("environment");
 
 cameraBtn.onclick=startCamera;takePhotoBtn.onclick=takePhoto;retakeBtn.onclick=startCamera;
 closeCameraBtn.onclick=()=>{stopCamera();cameraVideo.style.display="none";photoPlaceholder.style.display=capturedPhoto.src?"none":"block";cameraActions.style.display="none";cameraStatus.textContent=""};
