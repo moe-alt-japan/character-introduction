@@ -62,6 +62,10 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
     <button class="camera-action" id="retakeBtn" type="button">↻ Retake</button>
     <button class="camera-action" id="closeCameraBtn" type="button">✕ Close</button>
   </div>
+  <div style="display:flex;justify-content:center;margin:8px 0;">
+    <button class="camera-action" id="uploadPhotoBtn" type="button">📁 Upload Photo</button>
+    <input id="photoFileInput" type="file" accept="image/*" hidden>
+  </div>
   <div class="camera-status" id="cameraStatus"></div>
 
   <div class="name-row">
@@ -224,6 +228,8 @@ const cameraActions=document.getElementById("cameraActions");
 const takePhotoBtn=document.getElementById("takePhotoBtn");
 const retakeBtn=document.getElementById("retakeBtn");
 const closeCameraBtn=document.getElementById("closeCameraBtn");
+const uploadPhotoBtn=document.getElementById("uploadPhotoBtn");
+const photoFileInput=document.getElementById("photoFileInput");
 const cameraStatus=document.getElementById("cameraStatus");
 
 function stopCamera(){
@@ -253,8 +259,33 @@ function takePhoto(){
 }
 function clearPhoto(){
   stopCamera();capturedPhoto.removeAttribute("src");capturedPhoto.style.display="none";cameraVideo.style.display="none";
-  photoPlaceholder.style.display="block";cameraActions.style.display="none";cameraStatus.textContent="";
+  photoPlaceholder.style.display="block";cameraActions.style.display="none";cameraStatus.textContent="";photoFileInput.value="";
 }
+uploadPhotoBtn.onclick=()=>photoFileInput.click();
+
+photoFileInput.onchange=()=>{
+  const file=photoFileInput.files && photoFileInput.files[0];
+  if(!file)return;
+  if(!file.type.startsWith("image/")){
+    cameraStatus.textContent="Please choose an image file.";
+    photoFileInput.value="";
+    return;
+  }
+
+  stopCamera();
+  const reader=new FileReader();
+  reader.onload=()=>{
+    capturedPhoto.src=reader.result;
+    capturedPhoto.style.display="block";
+    cameraVideo.style.display="none";
+    photoPlaceholder.style.display="none";
+    cameraActions.style.display="none";
+    cameraStatus.textContent="Photo uploaded.";
+  };
+  reader.onerror=()=>{cameraStatus.textContent="Sorry, the photo could not be opened."};
+  reader.readAsDataURL(file);
+};
+
 cameraBtn.onclick=startCamera;takePhotoBtn.onclick=takePhoto;retakeBtn.onclick=startCamera;
 closeCameraBtn.onclick=()=>{stopCamera();cameraVideo.style.display="none";photoPlaceholder.style.display=capturedPhoto.src?"none":"block";cameraActions.style.display="none";cameraStatus.textContent=""};
 window.addEventListener("pagehide",stopCamera);
