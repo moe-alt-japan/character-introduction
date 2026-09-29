@@ -3,741 +3,263 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Character Introduction</title>
-
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
-  background: #e9f5f4;
-  color: #222;
-}
-
-header {
-  background: #286b69;
-  color: white;
-  text-align: center;
-  padding: 16px;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.app {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 20px;
-  max-width: 1400px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* LEFT SIDE */
-
-.preview {
-  background: white;
-  border-radius: 20px;
-  padding: 25px;
-  min-height: 650px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-}
-
-.name-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.name-row input {
-  flex: 1;
-  padding: 12px 15px;
-  border: 3px solid #286b69;
-  border-radius: 12px;
-  font-size: 20px;
-  font-family: inherit;
-}
-
-.gender-btn {
-  border: 3px solid #333;
-  border-radius: 12px;
-  padding: 10px 20px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  background: #ddd;
-}
-
-.gender-btn.active {
-  background: #ff80d5;
-}
-
-.photo-card {
-  width: min(100%, 430px);
-  margin: 10px auto 28px;
-}
-
-.photo-box {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #f7f7f7;
-  border: 4px solid #286b69;
-  border-radius: 24px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.photo-placeholder {
-  color: #777;
-  text-align: center;
-  padding: 20px;
-  font-size: 18px;
-}
-
-#cameraVideo,
-#capturedPhoto {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-}
-
-.camera-button {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 5;
-  width: 54px;
-  height: 46px;
-  border: 3px solid #222;
-  border-radius: 12px;
-  background: white;
-  font-size: 26px;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,.2);
-}
-
-.camera-actions {
-  display: none;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.camera-action {
-  border: 3px solid #333;
-  border-radius: 12px;
-  padding: 9px 16px;
-  background: white;
-  font-family: inherit;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.camera-action.primary {
-  background: #55b9ff;
-}
-
-.camera-status {
-  min-height: 22px;
-  margin-top: 7px;
-  text-align: center;
-  font-size: 14px;
-  color: #555;
-}
-
-.sentence {
-  font-size: 30px;
-  margin: 20px 0;
-  padding: 12px 10px;
-  border-bottom: 3px solid #55c4c1;
-}
-
-.answer {
-  color: #e7b800;
-  font-weight: bold;
-}
-
-/* RIGHT SIDE */
-
-.controls {
-  background: #d8d8d8;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
-}
-
-.section-title {
-  font-size: 25px;
-  font-weight: bold;
-  margin: 10px 0 15px;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.card {
-  background: white;
-  border: 3px solid #333;
-  border-radius: 12px;
-  padding: 12px 6px;
-  text-align: center;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  min-height: 75px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: .15s;
-}
-
-.card:hover {
-  transform: scale(1.04);
-}
-
-.card.selected {
-  background: #fff29a;
-  border-color: #e3ad00;
-}
-
-.personality-card.selected {
-  background: #bdefff;
-  border-color: #008bb8;
-}
-
-.toggle-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-.toggle {
-  padding: 8px 16px;
-  border: 3px solid #333;
-  border-radius: 10px;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.can {
-  background: #55b9ff;
-}
-
-.cant {
-  background: #ff6f92;
-}
-
-hr {
-  margin: 25px 0;
-  border: 0;
-  border-top: 3px solid #aaa;
-}
-
-.reset {
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  border: none;
-  border-radius: 12px;
-  background: #286b69;
-  color: white;
-  font-family: inherit;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-@media(max-width: 850px) {
-  .app {
-    grid-template-columns: 1fr;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#eaf4f3;color:#222;font-family:"Comic Sans MS","Trebuchet MS",sans-serif}
+header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-size:28px;font-weight:bold}
+.app{display:grid;grid-template-columns:minmax(360px,.8fr) minmax(620px,1.35fr);gap:18px;max-width:1500px;margin:auto;padding:18px;min-height:calc(100vh - 64px)}
+.panel{background:white;border-radius:20px;box-shadow:0 4px 12px #0002;overflow:hidden}
+.left-panel{padding:18px}
+.right-column{display:grid;grid-template-rows:auto auto;gap:18px}
+.section{background:#dfe7e7;border-radius:20px;padding:18px;box-shadow:0 4px 12px #0002}
+.section-title{margin:0 0 12px;text-align:center;font-size:28px;color:#225f5d}
+.photo-box{position:relative;width:min(100%,410px);aspect-ratio:4/3;margin:0 auto 12px;background:#f6f6f6;border:4px solid #286b69;border-radius:22px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+#cameraVideo,#capturedPhoto{width:100%;height:100%;object-fit:cover;display:none}
+.photo-placeholder{text-align:center;color:#777;padding:20px;font-size:17px}
+.camera-button{position:absolute;top:10px;left:10px;z-index:5;width:54px;height:46px;border:3px solid #222;border-radius:11px;background:white;font-size:25px;cursor:pointer}
+.camera-actions{display:none;justify-content:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.camera-action{border:2px solid #333;border-radius:10px;padding:8px 12px;background:white;font:700 15px inherit;cursor:pointer}
+.camera-action.primary{background:#68c5ff}
+.camera-status{min-height:20px;text-align:center;font-size:13px;color:#555}
+.name-row{display:flex;gap:8px;margin:12px 0}
+.name-row input{min-width:0;flex:1;padding:11px 14px;border:3px solid #286b69;border-radius:12px;font:20px inherit}
+.pronouns{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0 18px}
+.pronoun-btn{padding:10px 4px;border:3px solid #333;border-radius:12px;background:#ddd;font:700 20px inherit;cursor:pointer}
+.pronoun-btn.active{background:#ff82d5}
+.output{border-top:3px solid #bdd9d8;padding-top:8px}
+.sentence{font-size:27px;margin:13px 0;padding:9px 6px;border-bottom:3px solid #55c4c1}
+.answer{color:#d9a900;font-weight:bold}
+.mode-row{display:flex;justify-content:center;gap:10px;margin-bottom:12px}
+.mode-btn{padding:9px 20px;border:3px solid #333;border-radius:11px;font:700 18px inherit;cursor:pointer;background:#ddd}
+.mode-btn.can.active{background:#65c1ff}
+.mode-btn.cant.active{background:#ff7598}
+.help{text-align:center;margin:-5px 0 12px;color:#555;font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.choice-card{min-height:72px;background:white;border:3px solid #444;border-radius:11px;padding:7px 5px;font:700 14px inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.choice-card span{font-size:25px}
+.ability-card.selected-can{background:#c9ecff;border-color:#1888c5}
+.ability-card.selected-cant{background:#ffd0dc;border-color:#d83d67}
+.personality-card.selected{background:#c9f2ff;border-color:#008bb8}
+.reset{width:100%;margin-top:18px;padding:11px;border:0;border-radius:12px;background:#286b69;color:white;font:700 19px inherit;cursor:pointer}
+@media(max-width:1050px){.app{grid-template-columns:1fr}.right-column{grid-template-rows:auto}}
+@media(max-width:650px){.cards{grid-template-columns:repeat(3,1fr)}.sentence{font-size:22px}}
 </style>
 </head>
-
 <body>
+<header>👤 Character Introduction</header>
+<main class="app">
+<section class="panel left-panel">
+  <div class="photo-box">
+    <button class="camera-button" id="cameraBtn" type="button" aria-label="Open camera">📷</button>
+    <div class="photo-placeholder" id="photoPlaceholder">Click the camera to take a friend's picture.</div>
+    <video id="cameraVideo" autoplay playsinline muted></video>
+    <img id="capturedPhoto" alt="Captured photo">
+    <canvas id="photoCanvas" hidden></canvas>
+  </div>
+  <div class="camera-actions" id="cameraActions">
+    <button class="camera-action primary" id="takePhotoBtn" type="button">📸 Take Photo</button>
+    <button class="camera-action" id="retakeBtn" type="button">↻ Retake</button>
+    <button class="camera-action" id="closeCameraBtn" type="button">✕ Close</button>
+  </div>
+  <div class="camera-status" id="cameraStatus"></div>
 
-<header>
-  👤 Character Introduction
-</header>
+  <div class="name-row">
+    <input id="nameInput" type="text" placeholder="Type a name..." maxlength="20">
+  </div>
 
-<div class="app">
+  <div class="pronouns">
+    <button class="pronoun-btn" data-pronoun="I">I</button>
+    <button class="pronoun-btn" data-pronoun="You">You</button>
+    <button class="pronoun-btn active" data-pronoun="He">He</button>
+    <button class="pronoun-btn" data-pronoun="She">She</button>
+  </div>
 
-  <!-- LEFT -->
-  <section class="preview">
+  <div class="output">
+    <div class="sentence" id="introSentence">This is <span class="answer" id="personName">_____</span>.</div>
+    <div class="sentence"><span class="subject">He</span> can <span class="answer" id="canText">_____</span>.</div>
+    <div class="sentence"><span class="subject">He</span> can't <span class="answer" id="cantText">_____</span>.</div>
+    <div class="sentence"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality1">_____</span>.</div>
+    <div class="sentence"><span class="subject">He</span> <span class="beVerb">is</span> <span class="answer" id="personality2">_____</span>.</div>
+  </div>
 
-    <div class="photo-card">
-      <div class="photo-box">
-        <button class="camera-button" id="cameraBtn" type="button" aria-label="Open camera">📷</button>
-        <div class="photo-placeholder" id="photoPlaceholder">
-          Click the camera to take a friend's picture.
-        </div>
-        <video id="cameraVideo" autoplay playsinline muted></video>
-        <img id="capturedPhoto" alt="Captured friend photo">
-        <canvas id="photoCanvas" hidden></canvas>
-      </div>
+  <button class="reset" id="resetBtn">🔄 Reset</button>
+</section>
 
-      <div class="camera-actions" id="cameraActions">
-        <button class="camera-action primary" id="takePhotoBtn" type="button">📸 Take Photo</button>
-        <button class="camera-action" id="retakeBtn" type="button">↻ Retake</button>
-        <button class="camera-action" id="closeCameraBtn" type="button">✕ Close</button>
-      </div>
-      <div class="camera-status" id="cameraStatus"></div>
+<div class="right-column">
+  <section class="section">
+    <h2 class="section-title">🏃 Abilities / Sports</h2>
+    <div class="mode-row">
+      <button class="mode-btn can active" id="canBtn">Can</button>
+      <button class="mode-btn cant" id="cantBtn">Can't</button>
     </div>
-
-    <div class="name-row">
-      <input
-        id="nameInput"
-        type="text"
-        placeholder="Type a name..."
-        maxlength="20"
-      >
-
-      <button class="gender-btn active" id="heBtn">He</button>
-      <button class="gender-btn" id="sheBtn">She</button>
-    </div>
-
-    <div class="sentence">
-      This is
-      <span class="answer" id="personName">_____</span>.
-    </div>
-
-    <div class="sentence">
-      <span id="pronoun1">He</span>
-      <span id="abilityType">can</span>
-      <span class="answer" id="abilityText">_____</span>.
-    </div>
-
-    <div class="sentence">
-      <span id="pronoun2">He</span> is
-      <span class="answer" id="personality1">_____</span>.
-    </div>
-
-    <div class="sentence">
-      <span id="pronoun3">He</span> is
-      <span class="answer" id="personality2">_____</span>.
-    </div>
-
-  </section>
-
-
-  <!-- RIGHT -->
-  <section class="controls">
-
-    <div class="section-title">🏃 What can he/she do?</div>
-
-    <div class="toggle-row">
-      <button class="toggle can" id="canBtn">Can</button>
-      <button class="toggle cant" id="cantBtn">Can't</button>
-    </div>
-
+    <div class="help">Choose Can or Can't, then choose an activity.</div>
     <div class="cards" id="abilityCards">
-
-      <div class="card" data-value="play soccer">⚽ play soccer</div>
-      <div class="card" data-value="play baseball">⚾ play baseball</div>
-      <div class="card" data-value="play badminton">🏸 play badminton</div>
-
-      <div class="card" data-value="play table tennis">🏓 play table tennis</div>
-      <div class="card" data-value="play volleyball">🏐 play volleyball</div>
-      <div class="card" data-value="swim">🏊 swim</div>
-
-      <div class="card" data-value="skate">⛸️ skate</div>
-      <div class="card" data-value="ski">⛷️ ski</div>
-      <div class="card" data-value="do kendo">🥋 do kendo</div>
-
-      <div class="card" data-value="do judo">🥋 do judo</div>
-      <div class="card" data-value="play shogi">♟️ play shogi</div>
-      <div class="card" data-value="play kendama">🔴 play kendama</div>
-
-      <div class="card" data-value="play the piano">🎹 play the piano</div>
-      <div class="card" data-value="play the recorder">🎵 play the recorder</div>
-      <div class="card" data-value="ride a unicycle">🚲 ride a unicycle</div>
-
-      <div class="card" data-value="cook">🍳 cook</div>
-      <div class="card" data-value="run fast">🏃 run fast</div>
-      <div class="card" data-value="jump high">🤸 jump high</div>
-
-      <div class="card" data-value="sing well">🎤 sing well</div>
-
+      <button class="choice-card ability-card" data-value="play soccer"><span>⚽</span>play soccer</button>
+<button class="choice-card ability-card" data-value="play baseball"><span>⚾</span>play baseball</button>
+<button class="choice-card ability-card" data-value="play badminton"><span>🏸</span>play badminton</button>
+<button class="choice-card ability-card" data-value="play table tennis"><span>🏓</span>play table tennis</button>
+<button class="choice-card ability-card" data-value="play volleyball"><span>🏐</span>play volleyball</button>
+<button class="choice-card ability-card" data-value="swim"><span>🏊</span>swim</button>
+<button class="choice-card ability-card" data-value="skate"><span>⛸️</span>skate</button>
+<button class="choice-card ability-card" data-value="ski"><span>⛷️</span>ski</button>
+<button class="choice-card ability-card" data-value="do kendo"><span>🥋</span>do kendo</button>
+<button class="choice-card ability-card" data-value="do judo"><span>🥋</span>do judo</button>
+<button class="choice-card ability-card" data-value="play shogi"><span>♟️</span>play shogi</button>
+<button class="choice-card ability-card" data-value="play kendama"><span>🔴</span>play kendama</button>
+<button class="choice-card ability-card" data-value="play the piano"><span>🎹</span>play the piano</button>
+<button class="choice-card ability-card" data-value="play the recorder"><span>🎵</span>play the recorder</button>
+<button class="choice-card ability-card" data-value="ride a unicycle"><span>🚲</span>ride a unicycle</button>
+<button class="choice-card ability-card" data-value="cook"><span>🍳</span>cook</button>
+<button class="choice-card ability-card" data-value="run fast"><span>🏃</span>run fast</button>
+<button class="choice-card ability-card" data-value="jump high"><span>🤸</span>jump high</button>
+<button class="choice-card ability-card" data-value="sing well"><span>🎤</span>sing well</button>
     </div>
-
-    <hr>
-
-    <div class="section-title">😊 What is he/she like?</div>
-
-    <div class="cards" id="personalityCards">
-
-      <div class="card personality-card" data-value="kind">
-        😊 kind
-      </div>
-
-      <div class="card personality-card" data-value="funny">
-        😂 funny
-      </div>
-
-      <div class="card personality-card" data-value="friendly">
-        🤝 friendly
-      </div>
-
-      <div class="card personality-card" data-value="cheerful">
-        ☀️ cheerful
-      </div>
-
-      <div class="card personality-card" data-value="active">
-        🏃 active
-      </div>
-
-      <div class="card personality-card" data-value="quiet">
-        🤫 quiet
-      </div>
-
-      <div class="card personality-card" data-value="shy">
-        😳 shy
-      </div>
-
-      <div class="card personality-card" data-value="helpful">
-        🙋 helpful
-      </div>
-
-      <div class="card personality-card" data-value="smart">
-        🧠 smart
-      </div>
-
-      <div class="card personality-card" data-value="brave">
-        🦁 brave
-      </div>
-
-      <div class="card personality-card" data-value="nice">
-        👍 nice
-      </div>
-
-      <div class="card personality-card" data-value="energetic">
-        ⚡ energetic
-      </div>
-
-    </div>
-
-    <button class="reset" id="resetBtn">
-      🔄 Reset
-    </button>
-
   </section>
 
+  <section class="section">
+    <h2 class="section-title">😊 Personality</h2>
+    <div class="help">Choose up to 2 personality words.</div>
+    <div class="cards" id="personalityCards">
+      <button class="choice-card personality-card" data-value="kind"><span>😊</span>kind</button>
+<button class="choice-card personality-card" data-value="funny"><span>😂</span>funny</button>
+<button class="choice-card personality-card" data-value="friendly"><span>🤝</span>friendly</button>
+<button class="choice-card personality-card" data-value="cheerful"><span>☀️</span>cheerful</button>
+<button class="choice-card personality-card" data-value="active"><span>🏃</span>active</button>
+<button class="choice-card personality-card" data-value="quiet"><span>🤫</span>quiet</button>
+<button class="choice-card personality-card" data-value="shy"><span>😳</span>shy</button>
+<button class="choice-card personality-card" data-value="helpful"><span>🙋</span>helpful</button>
+<button class="choice-card personality-card" data-value="smart"><span>🧠</span>smart</button>
+<button class="choice-card personality-card" data-value="brave"><span>🦁</span>brave</button>
+<button class="choice-card personality-card" data-value="nice"><span>👍</span>nice</button>
+<button class="choice-card personality-card" data-value="energetic"><span>⚡</span>energetic</button>
+    </div>
+  </section>
 </div>
-
+</main>
 
 <script>
+let pronoun="He";
+let abilityMode="can";
+let canAbility="";
+let cantAbility="";
+let personalities=[];
+let cameraStream=null;
 
-let pronoun = "He";
-let abilityMode = "can";
-let personalities = [];
+const nameInput=document.getElementById("nameInput");
+const personName=document.getElementById("personName");
 
-
-/* CAMERA */
-
-const cameraBtn = document.getElementById("cameraBtn");
-const cameraVideo = document.getElementById("cameraVideo");
-const capturedPhoto = document.getElementById("capturedPhoto");
-const photoCanvas = document.getElementById("photoCanvas");
-const photoPlaceholder = document.getElementById("photoPlaceholder");
-const cameraActions = document.getElementById("cameraActions");
-const takePhotoBtn = document.getElementById("takePhotoBtn");
-const retakeBtn = document.getElementById("retakeBtn");
-const closeCameraBtn = document.getElementById("closeCameraBtn");
-const cameraStatus = document.getElementById("cameraStatus");
-
-let cameraStream = null;
-
-async function startCamera() {
-  stopCamera();
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    cameraStatus.textContent = "Camera access is not supported in this browser.";
-    return;
-  }
-
-  try {
-    cameraStatus.textContent = "Opening camera…";
-
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-      audio: false
-    });
-
-    cameraVideo.srcObject = cameraStream;
-    cameraVideo.style.display = "block";
-    capturedPhoto.style.display = "none";
-    photoPlaceholder.style.display = "none";
-    cameraActions.style.display = "flex";
-    takePhotoBtn.style.display = "inline-block";
-    retakeBtn.style.display = "none";
-    closeCameraBtn.style.display = "inline-block";
-    cameraStatus.textContent = "Camera ready. Click Take Photo.";
-  } catch (error) {
-    cameraStatus.textContent =
-      "Camera permission was not granted. Please allow camera access and try again.";
-    cameraActions.style.display = "none";
-    photoPlaceholder.style.display = "block";
-  }
+function updateName(){
+  const name=nameInput.value.trim();
+  personName.textContent=name||"_____";
+  const intro=document.getElementById("introSentence");
+  if(pronoun==="I") intro.innerHTML='My name is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
+  else if(pronoun==="You") intro.innerHTML='Your name is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
+  else intro.innerHTML='This is <span class="answer" id="personName">'+(name||"_____")+'</span>.';
 }
+nameInput.addEventListener("input",updateName);
 
-function stopCamera() {
-  if (cameraStream) {
-    cameraStream.getTracks().forEach(track => track.stop());
-    cameraStream = null;
-  }
-  cameraVideo.srcObject = null;
+function setPronoun(value){
+  pronoun=value;
+  document.querySelectorAll(".pronoun-btn").forEach(b=>b.classList.toggle("active",b.dataset.pronoun===value));
+  document.querySelectorAll(".subject").forEach(el=>el.textContent=value);
+  document.querySelectorAll(".beVerb").forEach(el=>el.textContent=(value==="I"?"am":value==="You"?"are":"is"));
+  updateName();
 }
+document.querySelectorAll(".pronoun-btn").forEach(b=>b.addEventListener("click",()=>setPronoun(b.dataset.pronoun)));
 
-function takePhoto() {
-  if (!cameraStream || !cameraVideo.videoWidth) {
-    cameraStatus.textContent = "Please wait for the camera to finish opening.";
-    return;
-  }
-
-  const width = cameraVideo.videoWidth;
-  const height = cameraVideo.videoHeight;
-
-  photoCanvas.width = width;
-  photoCanvas.height = height;
-
-  const context = photoCanvas.getContext("2d");
-  context.drawImage(cameraVideo, 0, 0, width, height);
-
-  capturedPhoto.src = photoCanvas.toDataURL("image/jpeg", 0.9);
-  capturedPhoto.style.display = "block";
-  cameraVideo.style.display = "none";
-
-  stopCamera();
-
-  takePhotoBtn.style.display = "none";
-  retakeBtn.style.display = "inline-block";
-  closeCameraBtn.style.display = "none";
-  cameraStatus.textContent = "Photo taken. Click Retake if you want another picture.";
+function setMode(mode){
+  abilityMode=mode;
+  document.getElementById("canBtn").classList.toggle("active",mode==="can");
+  document.getElementById("cantBtn").classList.toggle("active",mode==="cant");
 }
+document.getElementById("canBtn").onclick=()=>setMode("can");
+document.getElementById("cantBtn").onclick=()=>setMode("cant");
 
-function clearPhoto() {
-  stopCamera();
-  capturedPhoto.removeAttribute("src");
-  capturedPhoto.style.display = "none";
-  cameraVideo.style.display = "none";
-  photoPlaceholder.style.display = "block";
-  cameraActions.style.display = "none";
-  cameraStatus.textContent = "";
-}
-
-cameraBtn.addEventListener("click", startCamera);
-takePhotoBtn.addEventListener("click", takePhoto);
-retakeBtn.addEventListener("click", startCamera);
-
-closeCameraBtn.addEventListener("click", () => {
-  stopCamera();
-  cameraVideo.style.display = "none";
-
-  if (capturedPhoto.getAttribute("src")) {
-    capturedPhoto.style.display = "block";
-    photoPlaceholder.style.display = "none";
-  } else {
-    photoPlaceholder.style.display = "block";
-  }
-
-  cameraActions.style.display = "none";
-  cameraStatus.textContent = "";
-});
-
-window.addEventListener("pagehide", stopCamera);
-
-
-/* NAME */
-
-const nameInput = document.getElementById("nameInput");
-
-nameInput.addEventListener("input", () => {
-
-  const name = nameInput.value.trim();
-
-  document.getElementById("personName").textContent =
-    name || "_____";
-
-});
-
-
-/* HE / SHE */
-
-document.getElementById("heBtn").onclick = () => {
-  setGender("He");
-};
-
-document.getElementById("sheBtn").onclick = () => {
-  setGender("She");
-};
-
-function setGender(value) {
-
-  pronoun = value;
-
-  document.getElementById("pronoun1").textContent = value;
-  document.getElementById("pronoun2").textContent = value;
-  document.getElementById("pronoun3").textContent = value;
-
-  document.getElementById("heBtn").classList.toggle(
-    "active",
-    value === "He"
-  );
-
-  document.getElementById("sheBtn").classList.toggle(
-    "active",
-    value === "She"
-  );
-}
-
-
-/* CAN / CAN'T */
-
-document.getElementById("canBtn").onclick = () => {
-
-  abilityMode = "can";
-
-  document.getElementById("abilityType").textContent =
-    "can";
-
-};
-
-document.getElementById("cantBtn").onclick = () => {
-
-  abilityMode = "can't";
-
-  document.getElementById("abilityType").textContent =
-    "can't";
-
-};
-
-
-/* ABILITY */
-
-document
-.querySelectorAll("#abilityCards .card")
-.forEach(card => {
-
-  card.onclick = () => {
-
-    document
-    .querySelectorAll("#abilityCards .card")
-    .forEach(c => c.classList.remove("selected"));
-
-    card.classList.add("selected");
-
-    document.getElementById("abilityText").textContent =
-      card.dataset.value;
-
-  };
-
-});
-
-
-/* PERSONALITY */
-
-document
-.querySelectorAll(".personality-card")
-.forEach(card => {
-
-  card.onclick = () => {
-
-    const value = card.dataset.value;
-
-    if (personalities.includes(value)) {
-
-      personalities =
-        personalities.filter(p => p !== value);
-
-      card.classList.remove("selected");
-
+document.querySelectorAll(".ability-card").forEach(card=>{
+  card.onclick=()=>{
+    const value=card.dataset.value;
+    if(abilityMode==="can"){
+      canAbility=value;
+      document.getElementById("canText").textContent=value;
+      document.querySelectorAll(".ability-card").forEach(c=>c.classList.remove("selected-can"));
+      card.classList.add("selected-can");
     } else {
-
-      if (personalities.length >= 2) {
-
-        return;
-
-      }
-
-      personalities.push(value);
-
-      card.classList.add("selected");
-
+      cantAbility=value;
+      document.getElementById("cantText").textContent=value;
+      document.querySelectorAll(".ability-card").forEach(c=>c.classList.remove("selected-cant"));
+      card.classList.add("selected-cant");
     }
-
-    updatePersonalities();
-
   };
-
 });
 
+document.querySelectorAll(".personality-card").forEach(card=>{
+  card.onclick=()=>{
+    const value=card.dataset.value;
+    if(personalities.includes(value)){
+      personalities=personalities.filter(p=>p!==value);
+      card.classList.remove("selected");
+    } else {
+      if(personalities.length>=2)return;
+      personalities.push(value);
+      card.classList.add("selected");
+    }
+    document.getElementById("personality1").textContent=personalities[0]||"_____";
+    document.getElementById("personality2").textContent=personalities[1]||"_____";
+  };
+});
 
-function updatePersonalities() {
+const cameraBtn=document.getElementById("cameraBtn");
+const cameraVideo=document.getElementById("cameraVideo");
+const capturedPhoto=document.getElementById("capturedPhoto");
+const photoCanvas=document.getElementById("photoCanvas");
+const photoPlaceholder=document.getElementById("photoPlaceholder");
+const cameraActions=document.getElementById("cameraActions");
+const takePhotoBtn=document.getElementById("takePhotoBtn");
+const retakeBtn=document.getElementById("retakeBtn");
+const closeCameraBtn=document.getElementById("closeCameraBtn");
+const cameraStatus=document.getElementById("cameraStatus");
 
-  document.getElementById("personality1").textContent =
-    personalities[0] || "_____";
-
-  document.getElementById("personality2").textContent =
-    personalities[1] || "_____";
-
+function stopCamera(){
+  if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null}
+  cameraVideo.srcObject=null;
 }
+async function startCamera(){
+  stopCamera();
+  if(!navigator.mediaDevices?.getUserMedia){cameraStatus.textContent="Camera is not supported in this browser.";return}
+  try{
+    cameraStatus.textContent="Opening camera…";
+    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false});
+    cameraVideo.srcObject=cameraStream;
+    cameraVideo.style.display="block";capturedPhoto.style.display="none";photoPlaceholder.style.display="none";
+    cameraActions.style.display="flex";takePhotoBtn.style.display="inline-block";retakeBtn.style.display="none";closeCameraBtn.style.display="inline-block";
+    cameraStatus.textContent="Camera ready. Click Take Photo.";
+  }catch(e){cameraStatus.textContent="Please allow camera access and try again.";photoPlaceholder.style.display="block"}
+}
+function takePhoto(){
+  if(!cameraStream||!cameraVideo.videoWidth)return;
+  photoCanvas.width=cameraVideo.videoWidth;photoCanvas.height=cameraVideo.videoHeight;
+  photoCanvas.getContext("2d").drawImage(cameraVideo,0,0,photoCanvas.width,photoCanvas.height);
+  capturedPhoto.src=photoCanvas.toDataURL("image/jpeg",.9);
+  capturedPhoto.style.display="block";cameraVideo.style.display="none";stopCamera();
+  takePhotoBtn.style.display="none";retakeBtn.style.display="inline-block";closeCameraBtn.style.display="none";
+  cameraStatus.textContent="Photo taken.";
+}
+function clearPhoto(){
+  stopCamera();capturedPhoto.removeAttribute("src");capturedPhoto.style.display="none";cameraVideo.style.display="none";
+  photoPlaceholder.style.display="block";cameraActions.style.display="none";cameraStatus.textContent="";
+}
+cameraBtn.onclick=startCamera;takePhotoBtn.onclick=takePhoto;retakeBtn.onclick=startCamera;
+closeCameraBtn.onclick=()=>{stopCamera();cameraVideo.style.display="none";photoPlaceholder.style.display=capturedPhoto.src?"none":"block";cameraActions.style.display="none";cameraStatus.textContent=""};
+window.addEventListener("pagehide",stopCamera);
 
-
-/* RESET */
-
-document.getElementById("resetBtn").onclick = () => {
-
-  clearPhoto();
-
-  nameInput.value = "";
-
-  personalities = [];
-
-  setGender("He");
-
-  abilityMode = "can";
-
-  document.getElementById("personName").textContent =
-    "_____";
-
-  document.getElementById("abilityType").textContent =
-    "can";
-
-  document.getElementById("abilityText").textContent =
-    "_____";
-
-  document.getElementById("personality1").textContent =
-    "_____";
-
-  document.getElementById("personality2").textContent =
-    "_____";
-
-  document.querySelectorAll(".card").forEach(card => {
-    card.classList.remove("selected");
-  });
-
+document.getElementById("resetBtn").onclick=()=>{
+  clearPhoto();nameInput.value="";canAbility="";cantAbility="";personalities=[];
+  document.getElementById("canText").textContent="_____";document.getElementById("cantText").textContent="_____";
+  document.getElementById("personality1").textContent="_____";document.getElementById("personality2").textContent="_____";
+  document.querySelectorAll(".choice-card").forEach(c=>c.classList.remove("selected","selected-can","selected-cant"));
+  setMode("can");setPronoun("He");updateName();
 };
-
 </script>
-
 </body>
 </html>
