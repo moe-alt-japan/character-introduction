@@ -44,6 +44,25 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
 .reset{width:100%;margin-top:18px;padding:11px;border:0;border-radius:12px;background:#286b69;color:white;font:700 19px inherit;cursor:pointer}
 @media(max-width:1050px){.app{grid-template-columns:1fr}.right-column{grid-template-rows:auto}}
 @media(max-width:650px){.cards{grid-template-columns:repeat(3,1fr)}.sentence{font-size:22px}}
+
+/* Full-screen colorful character presentation */
+.present-btn{width:100%;margin-top:10px;padding:14px;border:0;border-radius:13px;background:linear-gradient(100deg,#14c9f5,#8061ff,#ff69b5);color:white;font:700 21px "Comic Sans MS",sans-serif;cursor:pointer;box-shadow:0 4px 0 #347b9b}
+.presentation{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 10% 15%,#b7f1ff 0 3%,transparent 3.2%),radial-gradient(circle at 92% 85%,#ffe999 0 4%,transparent 4.2%),#f9fff0;overflow:auto;padding:18px;display:none}
+.presentation.show{display:flex;flex-direction:column}
+.present-toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:10px}
+.present-toolbar button{border:2px solid #174778;border-radius:12px;background:#fff;padding:9px 18px;font:700 17px "Comic Sans MS",sans-serif;cursor:pointer}
+.present-layout{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1700px;width:100%;margin:auto;align-items:stretch}
+.present-photo-frame{position:relative;min-height:350px;border:13px solid #16bdf0;outline:7px solid #ffe04b;outline-offset:-24px;border-radius:38px;background:#e2f8ff;box-shadow:0 0 0 5px #273e95,0 9px 25px #0002;display:flex;flex-direction:column;padding:19px;margin:15px 5px 20px}
+.present-photo[hidden],.present-photo-placeholder[hidden]{display:none}.present-photo{flex:1;min-height:0;width:100%;height:100%;object-fit:contain;border-radius:18px;background:white}
+.present-photo-placeholder{flex:1;display:flex;align-items:center;justify-content:center;font-size:30px;color:#567}
+.present-name{align-self:center;max-width:95%;overflow-wrap:anywhere;margin:-7px 0 0;background:linear-gradient(90deg,#ffdf6c,#fff3ad,#ffcf53);border:5px solid white;border-radius:50% 50% 22px 22px;padding:8px 30px;text-align:center;color:#172e6c;font-size:clamp(25px,3.3vw,58px);font-weight:900;box-shadow:0 5px 0 #1c4096}
+.present-decoration{position:absolute;z-index:1;font-size:clamp(26px,4vw,65px);filter:drop-shadow(2px 3px 0 white);pointer-events:none}.present-decoration.one{top:-30px;left:-24px}.present-decoration.two{top:-28px;right:-16px}.present-decoration.three{bottom:5px;right:-24px}.present-decoration.four{bottom:0;left:-20px}
+.present-info{display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,2vh,22px);padding:8px 0}
+.present-line{flex:1;min-height:105px;display:flex;align-items:center;gap:clamp(8px,2vw,24px);background:#fff;border:5px solid #42c8fa;border-radius:35px;padding:12px clamp(12px,2vw,32px);font-size:clamp(23px,3vw,49px);font-weight:bold;color:#14245a;box-shadow:0 4px 0 #d4f0ff}
+.present-line:nth-child(2){border-color:#ff82b0;background:#fff7fb}.present-line:nth-child(3){border-color:#61d9f1}.present-line:nth-child(4){border-color:#ffcc59;background:#fffdf4}
+.present-line img{width:clamp(65px,9vw,155px);height:clamp(65px,9vw,155px);object-fit:contain;flex-shrink:0}.present-line .word{color:#008d91}.present-line:nth-child(2) .word{color:#f33d85}.present-line:nth-child(3) .word{color:#168ed1}.present-line:nth-child(4) .word{color:#ed9a00}
+.present-line[hidden]{display:none}
+@media(max-width:800px){.present-layout{grid-template-columns:1fr;gap:12px}.present-photo-frame{min-height:300px;max-height:60vh}.present-info{gap:12px}.present-line{min-height:90px;font-size:clamp(23px,5vw,38px)}.presentation{padding:12px}}
 </style>
 </head>
 <body>
@@ -90,6 +109,7 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
   </div>
 
   <button class="reset" id="resetBtn">🔄 Reset</button>
+  <button class="present-btn" id="presentBtn" type="button">🌈 Save &amp; Present</button>
 </section>
 
 <div class="right-column">
@@ -143,6 +163,21 @@ header{background:#286b69;color:white;text-align:center;padding:13px 18px;font-s
   </section>
 </div>
 </main>
+
+
+<!-- Presentation is a separate view; original controls and selections stay untouched. -->
+<div class="presentation" id="presentation" role="dialog" aria-label="Character presentation" aria-modal="true">
+  <div class="present-toolbar"><button id="editPresentation" type="button">✏️ Edit</button><button id="fullScreenPresentation" type="button">⛶ Full Screen</button></div>
+  <div class="present-layout">
+    <div class="present-photo-frame">
+      <span class="present-decoration one">🌟</span><span class="present-decoration two">✨</span><span class="present-decoration three">⭐</span><span class="present-decoration four">💫</span>
+      <img id="presentPhoto" class="present-photo" alt="Character photo" hidden>
+      <div id="presentPhotoPlaceholder" class="present-photo-placeholder">📷 Add a photo</div>
+      <div class="present-name" id="presentName"></div>
+    </div>
+    <div class="present-info" id="presentInfo"></div>
+  </div>
+</div>
 
 <script>
 let pronoun="He";
@@ -314,6 +349,49 @@ document.getElementById("resetBtn").onclick=()=>{
   document.querySelectorAll(".choice-card").forEach(c=>c.classList.remove("selected","selected-can","selected-cant"));
   setMode("can");setPronoun("He");updateName();
 };
+
+// Build the presentation from the CURRENT answers and existing image paths.
+const presentation=document.getElementById("presentation");
+function presentLine(prefix,answer,image,number){
+  if(!answer)return null;
+  const line=document.createElement("div");line.className="present-line";
+  if(image){const pic=document.createElement("img");pic.src=image;pic.alt=answer;line.appendChild(pic)}
+  const words=document.createElement("div");words.append(document.createTextNode(prefix+" "));
+  const highlight=document.createElement("span");highlight.className="word";highlight.textContent=answer+".";
+  words.appendChild(highlight);line.appendChild(words);return line;
+}
+function openPresentation(){
+  const name=nameInput.value.trim();
+  const photo=capturedPhoto.getAttribute("src");
+  const pic=document.getElementById("presentPhoto");
+  pic.hidden=!photo;if(photo)pic.src=photo;else pic.removeAttribute("src");
+  document.getElementById("presentPhotoPlaceholder").hidden=!!photo;
+  document.getElementById("presentName").textContent=name||"My Character";
+  const info=document.getElementById("presentInfo");info.replaceChildren();
+  const be=pronoun==="I"?"am":pronoun==="You"?"are":"is";
+  const getImage=(selector)=>document.querySelector(selector)?.dataset.image||"";
+  const lines=[
+    presentLine(pronoun+" can",canAbility,getImage('.ability-card[data-value="'+CSS.escape(canAbility)+'"]'),1),
+    presentLine(pronoun+" can't",cantAbility,getImage('.ability-card[data-value="'+CSS.escape(cantAbility)+'"]'),2),
+    ...personalities.map((p,i)=>presentLine(pronoun+" "+be,p,getImage('.personality-card[data-value="'+CSS.escape(p)+'"]'),i+3))
+  ].filter(Boolean);
+  if(!lines.length){const msg=document.createElement("div");msg.className="present-line";msg.textContent="Choose some activities and personality words!";info.appendChild(msg)}
+  else lines.forEach(line=>info.appendChild(line));
+  presentation.classList.add("show");document.body.style.overflow="hidden";
+  // Browsers may refuse automatic full screen without permission; the view still fills the window.
+  if(presentation.requestFullscreen)presentation.requestFullscreen().catch(()=>{});
+}
+function closePresentation(){
+  if(document.fullscreenElement===presentation)document.exitFullscreen().catch(()=>{});
+  presentation.classList.remove("show");document.body.style.overflow="";
+}
+document.getElementById("presentBtn").addEventListener("click",openPresentation);
+document.getElementById("editPresentation").addEventListener("click",closePresentation);
+document.getElementById("fullScreenPresentation").addEventListener("click",()=>{
+  if(document.fullscreenElement===presentation)document.exitFullscreen().catch(()=>{});
+  else presentation.requestFullscreen?.().catch(()=>{});
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&presentation.classList.contains("show"))closePresentation()});
 </script>
 </body>
 </html>
